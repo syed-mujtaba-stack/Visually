@@ -3,7 +3,7 @@
 
 import { generateImage } from '@/ai/flows/generate-image';
 
-export async function handleImageGeneration(prompt: string): Promise<{ imageUrl?: string; error?: string }> {
+export async function handleImageGeneration(prompt: string, count: number): Promise<{ imageUrls?: string[]; error?: string }> {
   if (!prompt) {
     return {
       error: 'Prompt is required.',
@@ -15,11 +15,11 @@ export async function handleImageGeneration(prompt: string): Promise<{ imageUrl?
   }
 
   try {
-    const result = await generateImage({ prompt });
-    if (!result.imageUrl) {
-        throw new Error("Image generation failed to return a URL.");
+    const result = await generateImage({ prompt, count });
+    if (!result.imageUrls || result.imageUrls.length === 0) {
+        throw new Error("Image generation failed to return any URLs.");
     }
-    return { imageUrl: result.imageUrl };
+    return { imageUrls: result.imageUrls };
   } catch (error) {
     console.error(error);
     return {

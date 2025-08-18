@@ -13,11 +13,12 @@ import {z} from 'genkit';
 
 const GenerateImageInputSchema = z.object({
   prompt: z.string().describe('The text prompt to generate an image from.'),
+  count: z.number().optional().default(1).describe('The number of images to generate.'),
 });
 export type GenerateImageInput = z.infer<typeof GenerateImageInputSchema>;
 
 const GenerateImageOutputSchema = z.object({
-  imageUrl: z.string().describe('The data URI of the generated image.'),
+  imageUrls: z.array(z.string()).describe('The data URIs of the generated images.'),
 });
 export type GenerateImageOutput = z.infer<typeof GenerateImageOutputSchema>;
 
@@ -25,28 +26,26 @@ export async function generateImage(input: GenerateImageInput): Promise<Generate
   return generateImageFlow(input);
 }
 
-const generateImagePrompt = ai.definePrompt({
-  name: 'generateImagePrompt',
-  input: {schema: GenerateImageInputSchema},
-  output: {schema: GenerateImageOutputSchema},
-  prompt: `Generate an image based on the following prompt:\n\n{{prompt}}`,
-});
-
 const generateImageFlow = ai.defineFlow(
   {
     name: 'generateImageFlow',
     inputSchema: GenerateImageInputSchema,
     outputSchema: GenerateImageOutputSchema,
   },
-  async input => {
-    const {media} = await ai.generate({
-      model: 'googleai/gemini-2.0-flash-preview-image-generation',
-      prompt: input.prompt,
-      config: {
-        responseModalities: ['TEXT', 'IMAGE'],
-      },
-    });
+  async (input) => {
+    const generationPromises = Array.from({ length: input.count }, () =>
+      ai.generate({
+        model: 'googleai/gemini-2.0-flash-preview-image-generation',
+        prompt: input.prompt,
+        config: {
+          responseModalities: ['TEXT', 'IMAGE'],
+        },
+      })
+    );
 
-    return {imageUrl: media!.url!};
+    const results = await Promise.all(generationPromises);
+    const imageUrls = results.map(result => result.media?.url!).filter(Boolean);
+
+    return { imageUrls };
   }
 );
