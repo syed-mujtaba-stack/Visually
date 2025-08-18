@@ -1,5 +1,7 @@
 import { ImageGenerator } from "@/components/image-generator";
+import { LogoGenerator } from "@/components/logo-generator";
 import { ThreeScene } from "@/components/three-scene";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
   return (
@@ -17,7 +19,18 @@ export default function Home() {
             Transform your ideas into stunning visuals. Just type a prompt and let our AI do the magic.
           </p>
         </div>
-        <ImageGenerator />
+        <Tabs defaultValue="image" className="w-full max-w-2xl">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="image">Image Generator</TabsTrigger>
+            <TabsTrigger value="logo">Logo Generator</TabsTrigger>
+          </TabsList>
+          <TabsContent value="image">
+            <ImageGenerator />
+          </TabsContent>
+          <TabsContent value="logo">
+            <LogoGenerator />
+          </TabsContent>
+        </Tabs>
       </main>
     </>
   );

@@ -8,25 +8,25 @@ import { z } from 'zod';
 import Image from 'next/image';
 import { Download, Twitter, Facebook, Sparkles, Image as ImageIcon, LoaderCircle, DownloadCloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { handleImageGeneration } from '@/app/actions';
+import { handleLogoGeneration } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from './ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 const FormSchema = z.object({
-  prompt: z.string().min(10, {
-    message: 'Prompt must be at least 10 characters long.',
-  }).max(200, {
-      message: 'Prompt cannot exceed 200 characters.'
+  prompt: z.string().min(3, {
+    message: 'Prompt must be at least 3 characters long.',
+  }).max(50, {
+      message: 'Prompt cannot exceed 50 characters.'
   }),
   count: z.coerce.number().min(1).max(10),
 });
 
-export function ImageGenerator() {
+export function LogoGenerator() {
   const [imageUrls, setImageUrls] = useState<string[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
@@ -42,7 +42,7 @@ export function ImageGenerator() {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true);
     setImageUrls(null);
-    const result = await handleImageGeneration(data.prompt, data.count);
+    const result = await handleLogoGeneration(data.prompt, data.count);
     setIsLoading(false);
 
     if (result.error) {
@@ -54,7 +54,7 @@ export function ImageGenerator() {
     } else if (result.imageUrls) {
       setImageUrls(result.imageUrls);
       toast({
-        title: `Generated ${result.imageUrls.length} image(s)!`,
+        title: `Generated ${result.imageUrls.length} logo(s)!`,
         description: 'Your vision has been brought to life.',
       });
     }
@@ -63,7 +63,7 @@ export function ImageGenerator() {
   const handleDownload = (url: string) => {
     const link = document.createElement('a');
     link.href = url;
-    link.download = `visually-generated-image-${Date.now()}.png`;
+    link.download = `visually-generated-logo-${Date.now()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -73,7 +73,7 @@ export function ImageGenerator() {
     imageUrls?.forEach((url, index) => {
       const link = document.createElement('a');
       link.href = url;
-      link.download = `visually-generated-image-${Date.now()}-${index + 1}.png`;
+      link.download = `visually-generated-logo-${Date.now()}-${index + 1}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -81,7 +81,7 @@ export function ImageGenerator() {
   }
 
   const shareOnTwitter = () => {
-    const text = encodeURIComponent('Check out this image I generated with Visually! ✨');
+    const text = encodeURIComponent('Check out this logo I generated with Visually! ✨');
     const url = encodeURIComponent('https://github.com/firebase/studio');
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };
@@ -98,7 +98,7 @@ export function ImageGenerator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline text-2xl">
           <Sparkles className="text-primary" />
-          Image Generation
+          Logo Generation
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -110,9 +110,9 @@ export function ImageGenerator() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
-                      placeholder="e.g., A futuristic cityscape on a distant planet, neon glow, cinematic..."
-                      className="resize-none min-h-[100px] text-base"
+                    <Input
+                      placeholder="e.g., A minimalist logo for 'Visually'"
+                      className="text-base"
                       {...field}
                     />
                   </FormControl>
@@ -129,13 +129,13 @@ export function ImageGenerator() {
                     <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Number of images" />
+                          <SelectValue placeholder="Number of logos" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
                           <SelectItem key={num} value={String(num)}>
-                            {num} Image{num > 1 ? 's' : ''}
+                            {num} Logo{num > 1 ? 's' : ''}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -151,7 +151,7 @@ export function ImageGenerator() {
                     Generating...
                   </>
                 ) : (
-                  'Generate Image'
+                  'Generate Logo'
                 )}
               </Button>
             </div>
@@ -174,16 +174,16 @@ export function ImageGenerator() {
                           <div className="w-full aspect-square rounded-lg bg-black/20 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
                             <Image
                               src={url}
-                              alt={`Generated image ${index + 1}`}
+                              alt={`Generated logo ${index + 1}`}
                               width={512}
                               height={512}
                               className="object-contain"
-                              data-ai-hint="futuristic city"
+                              data-ai-hint="logo"
                             />
                            </div>
                            <Button variant="outline" onClick={() => handleDownload(url)} className={buttonStyle}>
                               <Download className="mr-2 h-4 w-4" />
-                              Download Image {index + 1}
+                              Download Logo {index + 1}
                            </Button>
                         </CarouselItem>
                       ))}
@@ -199,7 +199,7 @@ export function ImageGenerator() {
                   <div className="w-full aspect-square rounded-lg bg-black/20 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
                     <div className="flex flex-col items-center gap-4 text-muted-foreground">
                         <ImageIcon size={48} />
-                        <p>Your generated image will appear here</p>
+                        <p>Your generated logo will appear here</p>
                     </div>
                   </div>
                 )}
