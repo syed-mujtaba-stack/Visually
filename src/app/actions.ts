@@ -3,6 +3,7 @@
 
 import { generateImage } from '@/ai/flows/generate-image';
 import { generateLogo } from '@/ai/flows/generate-logo';
+import { generateVideo } from '@/ai/flows/generate-video';
 
 export async function handleImageGeneration(prompt: string, count: number): Promise<{ imageUrls?: string[]; error?: string }> {
   if (!prompt) {
@@ -54,3 +55,28 @@ export async function handleLogoGeneration(prompt: string, count: number): Promi
     };
   }
 }
+
+export async function handleVideoGeneration(prompt: string): Promise<{ videoUrl?: string; error?: string }> {
+    if (!prompt) {
+      return {
+        error: 'Prompt is required.',
+      };
+    }
+    
+    if (prompt.length < 10) {
+        return { error: 'Prompt must be at least 10 characters long.' };
+    }
+  
+    try {
+      const result = await generateVideo({ prompt });
+      if (!result.videoUrl) {
+          throw new Error("Video generation failed to return a URL.");
+      }
+      return { videoUrl: result.videoUrl };
+    } catch (error) {
+      console.error(error);
+      return {
+        error: 'Failed to generate video. The model might be unavailable or the content could not be processed. Please try again later.',
+      };
+    }
+  }

@@ -1,6 +1,7 @@
 import { ImageGenerator } from "@/components/image-generator";
 import { LogoGenerator } from "@/components/logo-generator";
 import { ThreeScene } from "@/components/three-scene";
+import { VideoGenerator } from "@/components/video-generator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
@@ -20,15 +21,19 @@ export default function Home() {
           </p>
         </div>
         <Tabs defaultValue="image" className="w-full max-w-2xl">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="image">Image Generator</TabsTrigger>
             <TabsTrigger value="logo">Logo Generator</TabsTrigger>
+            <TabsTrigger value="video">Video Generator</TabsTrigger>
           </TabsList>
           <TabsContent value="image">
             <ImageGenerator />
           </TabsContent>
           <TabsContent value="logo">
             <LogoGenerator />
+          </TabsContent>
+          <TabsContent value="video">
+            <VideoGenerator />
           </TabsContent>
         </Tabs>
       </main>
