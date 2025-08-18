@@ -3,4 +3,3 @@ config();
 
 import '@/ai/flows/generate-image.ts';
 import '@/ai/flows/generate-logo.ts';
-import '@/ai/flows/generate-favicon.ts';
