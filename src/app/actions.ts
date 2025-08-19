@@ -12,10 +12,6 @@ export async function handleImageGeneration(prompt: string, count: number): Prom
     };
   }
   
-  if (prompt.length < 10) {
-      return { error: 'Prompt must be at least 10 characters long.' };
-  }
-
   try {
     const result = await generateImage({ prompt, count });
     if (!result.imageUrls || result.imageUrls.length === 0) {
@@ -38,10 +34,6 @@ export async function handleLogoGeneration(prompt: string, count: number): Promi
     };
   }
   
-  if (prompt.length < 3) {
-      return { error: 'Prompt must be at least 3 characters long.' };
-  }
-
   try {
     const result = await generateLogo({ prompt, count });
     if (!result.imageUrls || result.imageUrls.length === 0) {
@@ -61,10 +53,6 @@ export async function handleVideoGeneration(prompt: string): Promise<{ videoUrl?
       return {
         error: 'Prompt is required.',
       };
-    }
-    
-    if (prompt.length < 10) {
-        return { error: 'Prompt must be at least 10 characters long.' };
     }
   
     try {

@@ -18,8 +18,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 const FormSchema = z.object({
-  prompt: z.string().min(3, {
-    message: 'Prompt must be at least 3 characters long.',
+  prompt: z.string().min(1, {
+    message: 'Prompt is required.',
   }).max(50, {
       message: 'Prompt cannot exceed 50 characters.'
   }),
