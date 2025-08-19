@@ -1,6 +1,8 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from '@/hooks/use-auth';
+import { Header } from '@/components/layout/header';
 
 export const metadata: Metadata = {
   title: 'Visually - AI Image Generation',
@@ -20,8 +22,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        {children}
-        <Toaster />
+        <AuthProvider>
+          <Header />
+          {children}
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );

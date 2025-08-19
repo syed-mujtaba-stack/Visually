@@ -1,3 +1,4 @@
+
 import { ImageGenerator } from "@/components/image-generator";
 import { LogoGenerator } from "@/components/logo-generator";
 import { SpeechGenerator } from "@/components/speech-generator";
@@ -10,7 +11,7 @@ export default function Home() {
   return (
     <>
       <ThreeScene />
-      <main className="relative z-10 flex min-h-screen flex-col items-center justify-center gap-12 p-4 sm:p-8">
+      <main className="relative z-10 flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center gap-12 p-4 sm:p-8">
         <div className="w-full max-w-4xl text-center">
           <h1 
             className="text-5xl font-bold font-headline tracking-tighter sm:text-6xl md:text-7xl bg-clip-text text-transparent bg-gradient-to-br from-primary via-primary to-accent/80"
