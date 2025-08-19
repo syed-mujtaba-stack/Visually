@@ -1,8 +1,11 @@
 
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const prompts = {
     image: [
@@ -32,10 +35,14 @@ const prompts = {
 }
 
 export default function PromptsPage() {
-
+  const { toast } = useToast();
+  
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    // Add a toast notification here if you have one set up
+    toast({
+        title: "Copied to clipboard!",
+        description: "You can now paste the prompt in the generator.",
+    })
   }
 
   return (
@@ -51,10 +58,10 @@ export default function PromptsPage() {
 
       <div className="mt-16 w-full max-w-4xl">
         <Accordion type="multiple" className="w-full space-y-4">
-            <PromptCategory title="Image Prompts" prompts={prompts.image} />
-            <PromptCategory title="Logo Prompts" prompts={prompts.logo} />
-            <PromptCategory title="Video Prompts" prompts={prompts.video} />
-            <PromptCategory title="Story Prompts" prompts={prompts.story} />
+            <PromptCategory title="Image Prompts" prompts={prompts.image} copyToClipboard={copyToClipboard} />
+            <PromptCategory title="Logo Prompts" prompts={prompts.logo} copyToClipboard={copyToClipboard} />
+            <PromptCategory title="Video Prompts" prompts={prompts.video} copyToClipboard={copyToClipboard} />
+            <PromptCategory title="Story Prompts" prompts={prompts.story} copyToClipboard={copyToClipboard} />
         </Accordion>
       </div>
     </main>
@@ -62,13 +69,7 @@ export default function PromptsPage() {
 }
 
 
-function PromptCategory({ title, prompts }: { title: string; prompts: string[] }) {
-    const copyToClipboard = (text: string) => {
-        if(typeof window !== 'undefined'){
-            navigator.clipboard.writeText(text);
-            // You might want to show a toast here
-        }
-    }
+function PromptCategory({ title, prompts, copyToClipboard }: { title: string; prompts: string[], copyToClipboard: (text: string) => void }) {
     return (
         <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-lg">
             <AccordionItem value={title} className="border-b-0">
