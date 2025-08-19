@@ -30,6 +30,22 @@ const blogPosts = [
         imageUrl: "https://placehold.co/600x400.png",
         imageHint: "modern office",
     },
+    {
+        title: "From Text to Speech: The Magic of AI Narration",
+        date: "August 5, 2025",
+        tags: ["Speech", "AI", "Audio"],
+        summary: "Explore the technology behind our new Speech Generator. We dive into how AI can create natural-sounding human speech from any text.",
+        imageUrl: "https://placehold.co/600x400.png",
+        imageHint: "sound waves",
+    },
+    {
+        title: "Crafting Worlds: An Introduction to AI Story Generation",
+        date: "August 1, 2025",
+        tags: ["Story", "Writing", "AI"],
+        summary: "Our latest feature combines text, image, and audio generation to create immersive short stories. Learn about the creative process here.",
+        imageUrl: "https://placehold.co/600x400.png",
+        imageHint: "open book",
+    },
 ];
 
 export default function BlogsPage() {
