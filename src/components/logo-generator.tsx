@@ -18,11 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 const FormSchema = z.object({
-  prompt: z.string().min(1, {
-    message: 'Prompt is required.',
-  }).max(50, {
-      message: 'Prompt cannot exceed 50 characters.'
-  }),
+  prompt: z.string(),
   count: z.coerce.number().min(1).max(10),
 });
 
@@ -40,6 +36,13 @@ export function LogoGenerator() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (!data.prompt) {
+        form.setError("prompt", {
+            type: "manual",
+            message: "Prompt is required.",
+        });
+        return;
+    }
     setIsLoading(true);
     setImageUrls(null);
     const result = await handleLogoGeneration(data.prompt, data.count);

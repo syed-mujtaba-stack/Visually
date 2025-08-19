@@ -15,11 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from './ui/skeleton';
 
 const FormSchema = z.object({
-  prompt: z.string().min(1, {
-    message: 'Prompt is required.',
-  }).max(200, {
-      message: 'Prompt cannot exceed 200 characters.'
-  }),
+  prompt: z.string(),
 });
 
 export function VideoGenerator() {
@@ -35,6 +31,13 @@ export function VideoGenerator() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (!data.prompt) {
+        form.setError("prompt", {
+            type: "manual",
+            message: "Prompt is required.",
+        });
+        return;
+    }
     setIsLoading(true);
     setVideoUrl(null);
     const result = await handleVideoGeneration(data.prompt);
