@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/header';
 
 export const metadata: Metadata = {
   title: 'Visually - AI Image Generation',
-  description: 'Transform your ideas into stunning visuals with AI.',
+  description: '',
 };
 
 export default function RootLayout({
